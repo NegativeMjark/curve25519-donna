@@ -282,7 +282,7 @@ static void freduce_coefficients(limb *output) {
   output[10] = 0;
 
   for (i = 0; i < 10; i += 2) {
-    limb over = div_by_2_26(output[i]);
+    limb over = output[i] >> 26;
     /* The entry condition (that |output[i]| < 280*2^54) means that over is, at
      * most, 280*2^28 in the first iteration of this loop. This is added to the
      * next limb and we can approximate the resulting bound of that limb by
@@ -296,7 +296,7 @@ static void freduce_coefficients(limb *output) {
      *
      * For subsequent iterations of the loop, 281*2^54 remains a conservative
      * bound and no overflow occurs. */
-    over = div_by_2_25(output[i+1]);
+    over = output[i+1] >> 25;
     output[i+1] -= over << 25;
     output[i+2] += over;
   }
@@ -310,7 +310,7 @@ static void freduce_coefficients(limb *output) {
   /* Now output[1..9] are reduced, and |output[0]| < 2^26 + 19*281*2^29
    * So |over| will be no more than 2^16. */
   {
-    limb over = div_by_2_26(output[0]);
+    limb over = output[0] >> 26;
     output[0] -= over << 26;
     output[1] += over;
   }
