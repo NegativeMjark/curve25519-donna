@@ -208,33 +208,10 @@ static void freduce_degree(limb *output) {
    *
    * For output[0..8], the absolute entry value is < 14*2^54 and we add, at
    * most, 19*14*2^54 thus, on exit, |output[0..8]| < 280*2^54. */
-  output[8] += output[18] << 4;
-  output[8] += output[18] << 1;
-  output[8] += output[18];
-  output[7] += output[17] << 4;
-  output[7] += output[17] << 1;
-  output[7] += output[17];
-  output[6] += output[16] << 4;
-  output[6] += output[16] << 1;
-  output[6] += output[16];
-  output[5] += output[15] << 4;
-  output[5] += output[15] << 1;
-  output[5] += output[15];
-  output[4] += output[14] << 4;
-  output[4] += output[14] << 1;
-  output[4] += output[14];
-  output[3] += output[13] << 4;
-  output[3] += output[13] << 1;
-  output[3] += output[13];
-  output[2] += output[12] << 4;
-  output[2] += output[12] << 1;
-  output[2] += output[12];
-  output[1] += output[11] << 4;
-  output[1] += output[11] << 1;
-  output[1] += output[11];
-  output[0] += output[10] << 4;
-  output[0] += output[10] << 1;
-  output[0] += output[10];
+  unsigned i = 0;
+  for (i = 0; i < 9; ++i) {
+    output[i] += output[i + 10] * 19;
+  }
 }
 
 #if (-1 & 3) != 3
@@ -301,9 +278,7 @@ static void freduce_coefficients(limb *output) {
     output[i+2] += over;
   }
   /* Now |output[10]| < 281*2^29 and all other coefficients are reduced. */
-  output[0] += output[10] << 4;
-  output[0] += output[10] << 1;
-  output[0] += output[10];
+  output[0] += output[10] * 19;
 
   output[10] = 0;
 
